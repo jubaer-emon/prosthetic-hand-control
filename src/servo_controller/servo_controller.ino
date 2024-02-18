@@ -16,8 +16,11 @@ Adafruit_PWMServoDriver servoDriver = Adafruit_PWMServoDriver();
 // Make sure to connect SDA to A4 and SCL to A5
 
 SoftwareSerial hc06(0, 1);
+//SoftwareSerial hc06(2, 3);
 // may need a voltage divider for rx pin
 // https://www.aranacorp.com/en/arduino-and-bluetooth-module-hc-06/
+// Connect the HC-06 TX to the Arduino RX on pin 2. 
+// Connect the HC-06 RX to the Arduino TX on pin 3 through a voltage divider.
 
 #define HAND_OPEN 0
 #define HAND_CLOSE 1
