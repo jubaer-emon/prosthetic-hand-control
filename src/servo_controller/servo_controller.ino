@@ -1,4 +1,5 @@
 #include <SoftwareSerial.h>
+#include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
 // Depending on your servo make, the pulse width min and max may vary, you
@@ -12,6 +13,8 @@
 #define SERVO_FREQ 60 // Analog servos run at ~50 Hz updates
 
 Adafruit_PWMServoDriver servoDriver = Adafruit_PWMServoDriver();
+// Make sure to connect SDA to A4 and SCL to A5
+
 SoftwareSerial hc06(0, 1);
 
 #define HAND_OPEN 0
@@ -38,11 +41,11 @@ boolean isEmgEnabled = false;
 boolean isHc06Enabled = true;
 
 void setup() {
-  
-  if (isHc06Enabled) hc06.begin(baudRate);
   Serial.begin(baudRate);
+  if (isHc06Enabled) hc06.begin(baudRate);
 
   servoDriver.begin();
+  servoDriver.setPWMFreq(SERVO_FREQ);  // Analog servos run at ~50 Hz updates
   /* Warning:
      In theory the internal oscillator (clock) is 25MHz but it really isn't
      that precise. You can 'calibrate' this by tweaking this number until
@@ -58,30 +61,25 @@ void setup() {
      Setting the value here is specific to each individual I2C PCA9685 chip and
      affects the calculations for the PWM update frequency.
      Failure to correctly set the int.osc value will cause unexpected PWM results
+  servoDriver.setOscillatorFrequency(27000000);
   */
 
-  servoDriver.setOscillatorFrequency(27000000);
-
-  servoDriver.setPWMFreq(SERVO_FREQ);  // Analog servos run at ~50 Hz updates
-
-  delay(10);
-  Serial.println("Enter command:");
+  Serial.println("Program initialized. Enter commands:");
 }
 
 void loop() {  
   if (isEmgEnabled && Serial.availableForWrite()) {
     int emg_0 = analogRead(A0);
     int emg_1 = analogRead(A1);
-
     Serial.println(String(emg_0) + ' ' + String(emg_1));
   }
 
-  /*if (Serial.available()) {
+  if (Serial.available() > 0) {
     String input = Serial.readString();
     setState(input);
-  }*/
+  }
 
-  if (hc06.available()) {
+  while (hc06.available() > 0) {
     char ch = hc06.read();
     if (ch != ' ') {
       command += ch;
