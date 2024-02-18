@@ -44,6 +44,13 @@ void setup() {
   Serial.begin(baudRate);
   if (isHc06Enabled) hc06.begin(baudRate);
 
+  Serial.print("Checking servo driver I2C interface availibility: ");
+  byte servoDriverAddress = 40; // default address 0x40
+  Wire.beginTransmission(servoDriverAddress);
+  byte error = Wire.endTransmission();
+  if (error == 0) Serial.println("Available");
+  else Serial.println("Unavailable. Make sure to connect SDA to A4 and SCL to A5");
+  
   servoDriver.begin();
   servoDriver.setPWMFreq(SERVO_FREQ);  // Analog servos run at ~50 Hz updates
   /* Warning:
@@ -64,6 +71,7 @@ void setup() {
   servoDriver.setOscillatorFrequency(27000000);
   */
 
+//  while (!Serial); // only for Leonardo: wait for Serial Monitor
   Serial.println("Program initialized. Enter commands:");
 }
 
