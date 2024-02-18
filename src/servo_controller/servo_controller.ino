@@ -51,7 +51,11 @@ boolean isHc06Enabled = true;
 
 void setup() {
   Serial.begin(baudRate);
+  
   if (isHc06Enabled) hc06.begin(baudRate);
+  Serial.print("Sending msg to phone: ");
+  hc06.write("Msg from Arduino");
+  Serial.println("Sent.");
 
   Serial.print("Checking servo driver I2C interface status: ");
   byte servoDriverAddress = 40; // default address 0x40
@@ -102,8 +106,8 @@ void loop() {
       else {
         receivedChars_s[i_s] = '\0'; // terminate the string
         i_s = 0;
-        Serial.println(receivedChars_s);
-        setState(receivedChars_s);
+        Serial.println("Recieved '" + receivedChars_s + "'");
+        //setState(receivedChars_s);
       }
     } while (Serial.available() > 0);
   }
@@ -123,7 +127,7 @@ void loop() {
       else {
         receivedChars_h[i_h] = '\0'; // terminate the string
         i_h = 0;
-        Serial.println(receivedChars_h);
+        Serial.println("Recieved '" + receivedChars_h + "'");
         setState(receivedChars_h);
       }
     } while (hc06.available() > 0);
@@ -156,7 +160,7 @@ void printEmgData() {
 void setState(String cmd){
   cmd.toLowerCase();
 
-  Serial.println(cmd);
+  Serial.print(cmd);
   
   int cmd_no = 0;
   while (cmd_no < COMMANDS_SIZE) {
