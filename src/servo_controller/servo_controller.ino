@@ -1,4 +1,5 @@
-#include <SoftwareSerial.h>
+#include <BluetoothSerial.h>
+//#include <SoftwareSerial.h>
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
@@ -15,7 +16,9 @@
 Adafruit_PWMServoDriver servoDriver = Adafruit_PWMServoDriver();
 // Make sure to connect SDA to A4 and SCL to A5
 
-SoftwareSerial hc06(0, 1);
+BluetoothSerial BTSerial;
+
+//SoftwareSerial hc06(0, 1);
 //SoftwareSerial hc06(2, 3);
 // may need a voltage divider for rx pin
 // https://www.aranacorp.com/en/arduino-and-bluetooth-module-hc-06/
@@ -45,18 +48,21 @@ int wristPin = 6;
 const byte numChars = 32;
 char receivedChars_s[numChars];
 char receivedChars_h[numChars];
+char receivedChars_b[numChars];
 
 boolean isEmgEnabled = false;
-boolean isHc06Enabled = true;
+boolean isHc06Enabled = false;
 
 void setup() {
   Serial.begin(baudRate);
   
-  if (isHc06Enabled) hc06.begin(baudRate);
-  Serial.print("Sending msg to phone: ");
-  hc06.write("Msg from Arduino");
-  Serial.println("Sent.");
-
+  /*if (isHc06Enabled) {
+    hc06.begin(baudRate);
+    Serial.print("Sending msg to phone: ");
+    hc06.write("Msg from Arduino");
+    Serial.println("Sent.");
+  }*/
+  
   Serial.print("Checking servo driver I2C interface status: ");
   byte servoDriverAddress = 40; // default address 0x40
   Wire.beginTransmission(servoDriverAddress);
@@ -101,13 +107,32 @@ void loop() {
       ch = Serial.read();
       if (ch != '\n' && ch != ' ') {
         receivedChars_s[i_s] = ch;
-        if (i_s < numChars-1) i++;
+        if (i_s < numChars-1) i_s++;
       }
       else {
         receivedChars_s[i_s] = '\0'; // terminate the string
         i_s = 0;
-        Serial.println("Recieved '" + receivedChars_s + "'");
+        Serial.println(receivedChars_s);
         //setState(receivedChars_s);
+      }
+    } while (Serial.available() > 0);
+  }
+
+  if (BTSerial.available() > 0) {
+    static byte i_b = 0;
+    char ch;
+    BTSerial.print("Recieving input from serial monitor: ");
+    do {
+      ch = BTSerial.read();
+      if (ch != '\n' && ch != ' ') {
+        receivedChars_b[i_b] = ch;
+        if (i_b < numChars-1) i_b++;
+      }
+      else {
+        receivedChars_b[i_b] = '\0'; // terminate the string
+        i_b = 0;
+        Serial.println(receivedChars_b);
+        //setState(receivedChars_b);
       }
     } while (Serial.available() > 0);
   }
@@ -122,7 +147,7 @@ void loop() {
       ch = hc06.read();
       if (ch != '\n' && ch != ' ') {
         receivedChars_h[i_h] = ch;
-        if (i_h < numChars-1) i++;
+        if (i_h < numChars-1) i_h++;
       }
       else {
         receivedChars_h[i_h] = '\0'; // terminate the string
@@ -133,7 +158,7 @@ void loop() {
     } while (hc06.available() > 0);
   }
   */
-  if (hc06.available() > 0) {
+  /*if (hc06.available() > 0) {
     char ch = hc06.read();
     if (ch != ' ') {
       command += ch;
@@ -143,18 +168,18 @@ void loop() {
       setState(command);
       command = "";
     }
-  }
+  }*/
 
   //setFingersPos(0);
   delay(1);
 }
 
 void printEmgData() {
-  if (isEmgEnabled && Serial.availableForWrite()) {
+  /*if (isEmgEnabled && Serial.availableForWrite()) {
     int emg_0 = analogRead(A0);
     int emg_1 = analogRead(A1);
     Serial.println(String(millis())+' '+String(emg_0)+' '+String(emg_1));
-  }
+  }*/
 }
 
 void setState(String cmd){
