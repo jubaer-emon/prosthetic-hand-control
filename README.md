@@ -5,6 +5,9 @@
 
 ## General tips
 - Make sure the grounds connected.
+
+## Related Resources
+- [hackerhand](https://backyardbrains.com/experiments/RobotHand)
  
 ## TODO
 - [ ] command recognizer: use start to control hc06 only, keep speech recognition always on
