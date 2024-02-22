@@ -6,6 +6,9 @@
 ## General tips
 - Make sure the grounds connected.
 
+## Researh
+- [Performance potential of ML and DL classifiers](https://www.sciencedirect.com/science/article/abs/pii/S1746809421000847)
+
 ## Related Resources
 - [hackerhand](https://backyardbrains.com/experiments/RobotHand)
  
