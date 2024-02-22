@@ -10,6 +10,6 @@
 - [hackerhand](https://backyardbrains.com/experiments/RobotHand)
  
 ## TODO
-- [ ] command recognizer: use start to control hc06 only, keep speech recognition always on
-- [ ] remove gradual motion
+- [x] keep speech recognition always on
+- [x] remove gradual motion
 - [ ] try feature extraction on esp
