@@ -12,3 +12,4 @@
 ## TODO
 - [ ] command recognizer: use start to control hc06 only, keep speech recognition always on
 - [ ] remove gradual motion
+- [ ] try feature extraction on esp
