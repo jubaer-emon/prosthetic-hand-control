@@ -16,4 +16,4 @@
 - [x] keep speech recognition always on
 - [x] remove gradual motion
 - [ ] try feature extraction on esp
-- [ ] indicate if std deviation close to zero
+- [ ] indicate if variance close to zero
