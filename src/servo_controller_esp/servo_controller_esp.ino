@@ -328,14 +328,14 @@ bool emgControl2(void *) {
   else {    
     float emg1Stdev = emg1Data.unbiased_stdev(), emg2Stdev = emg2Data.unbiased_stdev();
     bool emg1High = emg1Stdev>emgThreshold, emg2High = emg2Stdev>emgThreshold;
-    bool emg1Higher = emg1Stdev > emg2Stdev;
+    bool emg1Higher = emg1Stdev>emg2Stdev;
   
 //    if (emg1High && emg2High) {
-//      if (emg1Stdev < emg2Stdev) {
-//        doCommand(HAND_OPEN);
+//      if (emg1Higher) {
+//        doCommand(HAND_CLOSE);
 //      }
 //      else {
-//        doCommand(HAND_CLOSE);
+//        doCommand(HAND_OPEN);
 //      }
 //    }
 
@@ -380,9 +380,9 @@ void setup() {
 
   // timed functions
   timer.every(sample_interval, getEmgData);
-  timer.every(sample_interval, printEmgData);
+//  timer.every(sample_interval, printEmgData);
 //  timer.every(sample_interval, emgControl);
-//  timer.every(sample_interval, emgControl2);
+  timer.every(sample_interval, emgControl2);
   timer.every(1000, toggleLED);
   //timer.every(10000, printRuntime);
 }
