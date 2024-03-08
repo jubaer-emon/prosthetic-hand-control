@@ -10,8 +10,6 @@ void setup() {
   hand.setPWMFreq(60);
 }
 
-int servo = 0;
-
 void loop() {
   for (int servo=0; servo<6; servo++) { 
     hand.setPWM(servo,0,150);
@@ -20,7 +18,5 @@ void loop() {
   for (int servo=0; servo<6; servo++) { 
     hand.setPWM(servo,0,650);
   }
-  int ang = 0;
-  int pulse = map(ang,0,180,150,650);
   delay(2000);
 }
